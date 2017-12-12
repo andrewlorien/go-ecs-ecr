@@ -60,6 +60,8 @@ make_task_def(){
 	]'
 	
 	task_def=$(printf "$task_template" $AWS_ACCOUNT_ID $CIRCLE_SHA1)
+	echo "task template should include name:ecrname and image:region and ecrname"
+	echo task_def
 }
 
 push_ecr_image(){
