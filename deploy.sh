@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
+# environment-specific variables
+region="ap-southeast-2"
+ecrname="portable-drupal"
+
 
 # more bash-friendly output for jq
 JQ="jq --raw-output --exit-status"
 
 configure_aws_cli(){
 	aws --version
-	aws configure set default.region ap-southeast-2
+	aws configure set default.region $region
 	aws configure set default.output json
 }
 
@@ -41,8 +45,8 @@ deploy_cluster() {
 make_task_def(){
 	task_template='[
 		{
-			"name": "prov-staging-ecr",
-			"image": "%s.dkr.ap-southeast-2.amazonaws.com/prov-staging-ecr:%s",
+			"name": "$ecrname",
+			"image": "%s.dkr.$region.amazonaws.com/$ecrname:%s",
 			"essential": true,
 			"memory": 200,
 			"cpu": 10,
@@ -59,8 +63,8 @@ make_task_def(){
 }
 
 push_ecr_image(){
-	eval $(aws ecr get-login --region ap-southeast-2)
-	docker push $AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-2.amazonaws.com/prov-staging-ecr:$CIRCLE_SHA1
+	eval $(aws ecr get-login --region $region)
+	docker push $AWS_ACCOUNT_ID.dkr.ecr.$region.amazonaws.com/$ecrname:$CIRCLE_SHA1
 }
 
 register_definition() {
