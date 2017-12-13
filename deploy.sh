@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # environment-specific variables
-region="ap-southeast-2"
-ecrname="portable-drupal"
+region="ap-southeast-2" #  you still have to change this in the tast template
+ecrname="portable-drupal" #  you still have to change this in the tast template
 
 
 # more bash-friendly output for jq
@@ -45,8 +45,8 @@ deploy_cluster() {
 make_task_def(){
 	task_template='[
 		{
-			"name": "$ecrname",
-			"image": "%s.dkr.$region.amazonaws.com/$ecrname:%s",
+			"name": "portable-drupal",
+			"image": "%s.dkr.ap-southeast-2.amazonaws.com/portable-drupal:%s",
 			"essential": true,
 			"memory": 200,
 			"cpu": 10,
